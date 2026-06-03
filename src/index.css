@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  --ocean-deep: #FDFBF7;
+  --ocean-wave: #0C4A4D;
+  --pearl: #121212;
+  --gold: #AF8C52;
+}
+
+.dark {
+  --ocean-deep: #011627;
+  --ocean-wave: #20B2AA;
+  --pearl: #F0F4F8;
+  --gold: #C5A059;
+}
+
+@theme {
+  --color-ocean-deep: var(--ocean-deep);
+  --color-ocean-wave: var(--ocean-wave);
+  --color-pearl: var(--pearl);
+  --color-gold: var(--gold);
+  
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: "BPG Irubaqidze", "Georgia", serif;
+  --font-display: "BPG Ucnobi", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply transition-colors duration-300 bg-ocean-deep text-pearl antialiased;
+  }
+}
+
+.display {
+  @apply font-display tracking-tight;
+}
+
+.glass-panel {
+  @apply bg-pearl/5 backdrop-blur-md border border-pearl/10 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)];
+}
+
+.serif {
+  @apply font-serif;
+}
+
+.badge-gold {
+  @apply bg-gold text-ocean-deep font-bold px-2 py-0.5 rounded text-[10px] uppercase tracking-widest;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.05); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+/* Custom wave animation */
+.waves {
+  position: relative;
+  width: 100%;
+  height: 15vh;
+  margin-bottom: -7px;
+  min-height: 100px;
+  max-height: 150px;
+}
+
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+@keyframes move-forever {
+  0% { transform: translate3d(-90px, 0, 0); }
+  100% { transform: translate3d(85px, 0, 0); }
+}
+
+/* Scrollbar styles */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-ocean-deep;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-ocean-wave/50 transition-colors;
+}
