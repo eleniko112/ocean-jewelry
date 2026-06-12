@@ -51,7 +51,14 @@ export const ShopProvider = ({ children }: { children: ReactNode }) => {
             }
             return p;
           });
-          const merged = [...cleaned];
+          // Update/override all initial products with the freshest details and correct paths from constants.ts!
+          const merged = cleaned.map(p => {
+            const initial = INITIAL_PRODUCTS.find(i => i.id === p.id);
+            if (initial) {
+              return initial;
+            }
+            return p;
+          });
           INITIAL_PRODUCTS.forEach(initial => {
             if (!merged.some(p => p.id === initial.id)) {
               merged.push(initial);
