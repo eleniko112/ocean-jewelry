@@ -60,7 +60,7 @@ export const ShopProvider = ({ children }: { children: ReactNode }) => {
           const merged = cleaned.map(p => {
             const initial = INITIAL_PRODUCTS.find(i => String(i.id) === String(p.id));
             if (initial) {
-              return initial;
+              return { ...initial, ...p };
             }
             return p;
           });

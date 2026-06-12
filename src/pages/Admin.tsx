@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useShop } from '../contexts/ShopContext';
-import { Plus, Trash2, Edit3, X, Save, Box, ShoppingBag, TrendingUp, Users, Lock } from 'lucide-react';
+import { Plus, Trash2, Edit3, X, Save, Box, ShoppingBag, TrendingUp, Users, Lock, Upload } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Product, Category } from '../types';
 import { cn } from '../lib/utils';
@@ -13,7 +13,72 @@ export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
   const t = TRANSLATIONS[language];
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+  };
+
+  const processFiles = async (files: File[]) => {
+    const base64Promises = files.map(file => {
+      if (!file.type.startsWith('image/')) {
+        alert('Only image files (JPEG, PNG, WEBP, SVG) are supported');
+        return null;
+      }
+      if (file.size > 800000) {
+        if (!confirm(`The image "${file.name}" is larger than 800KB. Large Base64 images may exceed browser LocalStorage quotas. We recommend compressing it first. Would you like to proceed anyway?`)) {
+          return null;
+        }
+      }
+      return convertToBase64(file);
+    });
+
+    const results = await Promise.all(base64Promises);
+    const validBase64 = results.filter((r): r is string => r !== null);
+
+    if (validBase64.length > 0) {
+      setFormData(prev => {
+        const currentImages = prev.images ? [...prev.images] : [];
+        const filteredCurrent = currentImages.filter(img => img && img.trim() !== '');
+        return {
+          ...prev,
+          images: [...filteredCurrent, ...validBase64]
+        };
+      });
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const files = Array.from(e.dataTransfer.files) as File[];
+      await processFiles(files);
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const files = Array.from(e.target.files) as File[];
+      await processFiles(files);
+    }
+  };
 
   const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
@@ -341,12 +406,17 @@ export default function Admin() {
                     />
                   </div>
 
-                  {/* Product Images (Photo Redacting/Editing) */}
+                  {/* Product Images (Photo Redacting/Editing & Base64 Converting) */}
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <label className="text-[10px] font-bold uppercase tracking-[0.4em] text-pearl/30">
-                        {t.admin.productImages}
-                      </label>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-[0.4em] text-pearl/30">
+                          {t.admin.productImages}
+                        </label>
+                        <p className="text-[10px] text-pearl/40 serif italic">
+                          Upload files to encode as Base64 (fully safe for Netlify) or provide a remote cloud URL.
+                        </p>
+                      </div>
                       <button
                         type="button"
                         onClick={() => {
@@ -363,64 +433,148 @@ export default function Admin() {
                       </button>
                     </div>
 
-                    <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                      {formData.images && formData.images.map((imgUrl, index) => (
-                        <div key={index} className="flex gap-4 items-center bg-black/25 p-4 border border-white/5 rounded-2xl">
-                          {/* Image preview thumbnail */}
-                          <div className="w-16 h-16 bg-black/40 border border-white/5 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center relative group/preview">
-                            {imgUrl ? (
-                              <img 
-                                src={imgUrl} 
-                                alt=""
-                                onError={(e) => {
-                                  (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/placeholder/800/1000';
+                    {/* Drag-and-drop / Browse Box */}
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      className={cn(
+                        "border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer relative group flex flex-col items-center justify-center space-y-3 min-h-[140px]",
+                        isDraggingOver 
+                          ? "border-ocean-wave bg-ocean-wave/10 text-ocean-wave" 
+                          : "border-white/10 bg-black/10 hover:border-ocean-wave/30 hover:bg-black/20"
+                      )}
+                      onClick={() => document.getElementById('base64-file-upload')?.click()}
+                    >
+                      <input 
+                        type="file"
+                        id="base64-file-upload"
+                        multiple
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleFileChange}
+                      />
+                      <Upload size={32} className={cn("stroke-[1.2] transition-transform group-hover:-translate-y-1", isDraggingOver ? "text-ocean-wave" : "text-pearl/40")} />
+                      <div className="space-y-1">
+                        <p className="text-xs font-bold text-pearl/80 uppercase tracking-wider">Drag & drop files here, or <span className="text-ocean-wave group-hover:underline">browse</span></p>
+                        <p className="text-[10px] text-pearl/30 serif italic">Supports PNG, JPEG, WEBP, and SVG. Converts instantly to embedded Base64.</p>
+                      </div>
+                    </div>
+
+                    {/* Image List */}
+                    <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+                      {formData.images && formData.images.map((imgUrl, index) => {
+                        const isBase64 = imgUrl && imgUrl.startsWith('data:');
+                        const dataSize = imgUrl ? Math.round((imgUrl.length * 3) / 4 / 1024) : 0; // rough estimation in KB
+                        
+                        return (
+                          <div key={index} className="flex flex-col md:flex-row gap-4 items-stretch md:items-center bg-black/25 p-4 border border-white/5 rounded-2xl transition-all hover:bg-black/35">
+                            {/* Image preview thumbnail */}
+                            <div className="w-20 h-20 bg-black/40 border border-white/5 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center relative group/preview">
+                              {imgUrl ? (
+                                <img 
+                                  src={imgUrl} 
+                                  alt=""
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/placeholder/800/1000';
+                                  }}
+                                  className="w-full h-full object-cover"
+                                  referrerPolicy="no-referrer"
+                                />
+                              ) : (
+                                <div className="text-pearl/20 text-[10px] font-mono">No Src</div>
+                              )}
+                            </div>
+
+                            <div className="flex-1 flex flex-col gap-2">
+                              {/* Metadata Badge details */}
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/5 text-pearl/60">
+                                  Image #{index + 1}
+                                </span>
+                                {isBase64 ? (
+                                  <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-ocean-wave/15 text-ocean-wave">
+                                    Base64 Encoded (~{dataSize} KB)
+                                  </span>
+                                ) : imgUrl ? (
+                                  <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/10 text-pearl/50">
+                                    Web path / Cloud URL
+                                  </span>
+                                ) : (
+                                  <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-400">
+                                    Empty Container
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Input field */}
+                              <input 
+                                type="text"
+                                required
+                                placeholder="Paste cloud URL or write/convert file path here..."
+                                value={imgUrl}
+                                onChange={(e) => {
+                                  const updated = [...(formData.images || [])];
+                                  updated[index] = e.target.value;
+                                  setFormData({
+                                    ...formData,
+                                    images: updated
+                                  });
                                 }}
-                                className="w-full h-full object-cover"
-                                referrerPolicy="no-referrer"
+                                className="w-full bg-black/20 border border-white/5 px-4 py-2.5 rounded-xl outline-none focus:border-ocean-wave serif text-pearl/80 italic font-light text-xs"
                               />
-                            ) : (
-                              <div className="text-pearl/20 text-[10px] font-mono">No Src</div>
-                            )}
+                            </div>
+
+                            {/* Action Operations */}
+                            <div className="flex items-center gap-2 justify-end">
+                              {/* Direct file replacement for this specific slot */}
+                              <label className="p-3 bg-ocean-wave/10 text-ocean-wave hover:bg-ocean-wave hover:text-white transition-all rounded-xl border border-ocean-wave/20 cursor-pointer flex items-center justify-center h-11 w-11" title="Upload directly to this slot">
+                                <Upload size={14} strokeWidth={1.5} />
+                                <input 
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={async (e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                      const file = e.target.files[0];
+                                      if (file.size > 800000) {
+                                        if (!confirm(`The image is larger than 800KB. Large Base64 images might exceed browser LocalStorage limits. Continue?`)) return;
+                                      }
+                                      const b64 = await convertToBase64(file);
+                                      const updated = [...(formData.images || [])];
+                                      updated[index] = b64;
+                                      setFormData({
+                                        ...formData,
+                                        images: updated
+                                      });
+                                    }
+                                  }}
+                                />
+                              </label>
+
+                              {/* Delete slots */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = (formData.images || []).filter((_, i) => i !== index);
+                                  setFormData({
+                                    ...formData,
+                                    images: updated
+                                  });
+                                }}
+                                className="p-3 bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all rounded-xl border border-rose-500/20 h-11 w-11 flex items-center justify-center"
+                                title="Delete Image Slot"
+                              >
+                                <Trash2 size={14} strokeWidth={1.5} />
+                              </button>
+                            </div>
                           </div>
-
-                          {/* Image URL input field */}
-                          <input 
-                            type="text"
-                            required
-                            placeholder="e.g., /assets/images/starfish_shell_earrings_1780467669639.png"
-                            value={imgUrl}
-                            onChange={(e) => {
-                              const updated = [...(formData.images || [])];
-                              updated[index] = e.target.value;
-                              setFormData({
-                                ...formData,
-                                images: updated
-                              });
-                            }}
-                            className="flex-1 bg-black/20 border border-white/5 px-6 py-4 rounded-xl outline-none focus:border-ocean-wave serif text-pearl/80 italic font-light text-sm"
-                          />
-
-                          {/* Delete button */}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const updated = (formData.images || []).filter((_, i) => i !== index);
-                              setFormData({
-                                ...formData,
-                                images: updated
-                              });
-                            }}
-                            className="p-3 bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all rounded-xl border border-rose-500/20"
-                            title="Delete Image"
-                          >
-                            <Trash2 size={16} strokeWidth={1.5} />
-                          </button>
-                        </div>
-                      ))}
+                        );
+                      })}
 
                       {(!formData.images || formData.images.length === 0) && (
-                        <div className="text-center py-6 text-pearl/30 serif italic text-sm">
-                          No images defined. Please add at least one image URL for this product.
+                        <div className="text-center py-6 text-pearl/30 serif italic text-sm border border-dashed border-white/5 rounded-2xl">
+                          No images defined. Drop files above or click "Add Image" to get started.
                         </div>
                       )}
                     </div>
