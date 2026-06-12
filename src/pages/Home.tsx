@@ -65,7 +65,7 @@ export default function Home() {
             <div className="absolute inset-0 glass-panel opacity-40 -rotate-3 translate-x-4 border-white/5" />
             <div className="absolute inset-0 glass-panel border-white/10 overflow-hidden">
                <img 
-                 src="/src/assets/images/starfish_shell_earrings_1780467669639.png" 
+                 src="/assets/images/starfish_shell_earrings_1780467669639.png" 
                  className="w-full h-full object-cover mix-blend-luminosity brightness-110 contrast-125 hover:mix-blend-normal transition-all duration-1000"
                  referrerPolicy="no-referrer"
                />
@@ -109,7 +109,7 @@ export default function Home() {
       <section className="py-20 px-12">
          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
             <Link to="/collection?category=necklace" className="md:col-span-8 group relative h-[500px] rounded-3xl overflow-hidden glass-panel border-pearl/5">
-               <img src="/src/assets/images/ocean_treasure_necklace_1780468061961.png" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
+               <img src="/assets/images/ocean_treasure_necklace_1780468061961.png" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
                <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep to-transparent opacity-60" />
                <div className="absolute bottom-12 left-12">
                   <h3 className="display text-4xl text-pearl mb-4 italic tracking-widest uppercase">{t.categories.necklace}</h3>
@@ -117,7 +117,7 @@ export default function Home() {
                </div>
             </Link>
             <Link to="/collection?category=ring" className="md:col-span-4 group relative h-[500px] rounded-3xl overflow-hidden glass-panel border-pearl/5">
-               <img src="/src/assets/images/ocean_sea_life_stacked_rings_1780468810230.png" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
+               <img src="/assets/images/ocean_sea_life_stacked_rings_1780468810230.png" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
                <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep to-transparent opacity-60" />
                <div className="absolute bottom-12 left-12">
                   <h3 className="display text-3xl text-pearl mb-4 italic tracking-widest uppercase">{t.categories.ring}</h3>
@@ -131,7 +131,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-12 py-32">
         <div className="relative h-[600px] rounded-[3rem] overflow-hidden flex items-center justify-center text-center p-12 glass-panel border-white/5">
           <img 
-            src="/src/assets/images/atlantis_crystal_tiara_1780467686297.png" 
+            src="/assets/images/atlantis_crystal_tiara_1780467686297.png" 
             alt="Ocean" 
             className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay" 
             referrerPolicy="no-referrer" 

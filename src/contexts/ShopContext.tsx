@@ -38,7 +38,20 @@ export const ShopProvider = ({ children }: { children: ReactNode }) => {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
-          const merged = [...parsed];
+          const cleaned = parsed.map(p => {
+            if (p && Array.isArray(p.images)) {
+              return {
+                ...p,
+                images: p.images.map((img: string) =>
+                  img.startsWith('/src/assets/images/')
+                    ? img.replace('/src/assets/images/', '/assets/images/')
+                    : img
+                )
+              };
+            }
+            return p;
+          });
+          const merged = [...cleaned];
           INITIAL_PRODUCTS.forEach(initial => {
             if (!merged.some(p => p.id === initial.id)) {
               merged.push(initial);

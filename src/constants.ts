@@ -13,7 +13,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['თეთრი ნიჟარა', 'მდინარის მარგალიტი', 'აკვამარინი', 'ოქრო 585'],
     materialsEn: ['White Scallop Shell', 'River Pearl', 'Aquamarine', '18K Gold Plated'],
     images: [
-      '/src/assets/images/ocean_treasure_necklace_1780468061961.png'
+      '/assets/images/ocean_treasure_necklace_1780468061961.png'
     ],
     rating: 4.9,
     reviewsCount: 28,
@@ -32,7 +32,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['მთვარის ქვა', 'ოქრო 585'],
     materialsEn: ['Moonstone', '18K Gold Plated'],
     images: [
-      '/src/assets/images/royal_starfish_necklace_1780468112679.png'
+      '/assets/images/royal_starfish_necklace_1780468112679.png'
     ],
     rating: 4.8,
     reviewsCount: 19,
@@ -51,7 +51,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['ნატურალური კაური', 'მდინარის მარგალიტები'],
     materialsEn: ['Natural Cowrie Shell', 'River Pearls'],
     images: [
-      '/src/assets/images/cowrie_barefoot_sandal_1780468095558.png'
+      '/assets/images/cowrie_barefoot_sandal_1780468095558.png'
     ],
     rating: 4.7,
     reviewsCount: 22,
@@ -70,7 +70,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['კაურის ნიჟარები', 'ოქრო 585'],
     materialsEn: ['Cowrie Shells', '18K Gold Plated'],
     images: [
-      '/src/assets/images/cowrie_body_chain_1780468079602.png'
+      '/assets/images/cowrie_body_chain_1780468079602.png'
     ],
     rating: 4.9,
     reviewsCount: 31,
@@ -89,7 +89,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['ნატურალური ნიჟარა', 'მარგალიტი', 'ოქრო 585'],
     materialsEn: ['Natural Shell', 'Pearl', '18K Gold Plated'],
     images: [
-      '/src/assets/images/starfish_shell_earrings_1780467669639.png'
+      '/assets/images/starfish_shell_earrings_1780467669639.png'
     ],
     rating: 4.9,
     reviewsCount: 14,
@@ -108,7 +108,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['აკვამარინი', 'აურა კვარცი', 'ნატურალური ნიჟარები'],
     materialsEn: ['Aquamarine', 'Aura Quartz', 'Natural Shells'],
     images: [
-      '/src/assets/images/atlantis_crystal_tiara_1780467686297.png'
+      '/assets/images/atlantis_crystal_tiara_1780467686297.png'
     ],
     rating: 5.0,
     reviewsCount: 4,
@@ -127,7 +127,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['მურანოს მინა', 'ვერცხლი 925'],
     materialsEn: ['Murano Glass', '925 Silver'],
     images: [
-      '/src/assets/images/jellyfish_glass_earrings_1780467700966.png'
+      '/assets/images/jellyfish_glass_earrings_1780467700966.png'
     ],
     rating: 4.8,
     reviewsCount: 11,
@@ -146,7 +146,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['ვერცხლის გრაგნილი', 'აკვამარინი', 'ვერცხლი 925'],
     materialsEn: ['Silver Wire Wrap', 'Aquamarine', '925 Silver'],
     images: [
-      '/src/assets/images/nautilus_shell_pendant_1780467715646.png'
+      '/assets/images/nautilus_shell_pendant_1780467715646.png'
     ],
     rating: 4.9,
     reviewsCount: 9,
@@ -165,7 +165,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['მოოქროვილი ლითონი', 'ოკეანის მარგალიტი'],
     materialsEn: ['Gold Plated Metal', 'Teal Pearl'],
     images: [
-      '/src/assets/images/starfish_arm_cuff_1780467728736.png'
+      '/assets/images/starfish_arm_cuff_1780467728736.png'
     ],
     rating: 4.7,
     reviewsCount: 7,
@@ -184,7 +184,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['ნატურალური კაური', 'მდინარის მარგალიტი', 'ოქრო 585'],
     materialsEn: ['Cowrie Shell', 'River Pearl', '18K Gold Plated'],
     images: [
-      '/src/assets/images/sunburst_cowrie_necklace_1780467742615.png'
+      '/assets/images/sunburst_cowrie_necklace_1780467742615.png'
     ],
     rating: 4.9,
     reviewsCount: 16,
@@ -203,7 +203,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['ვერცხლი 925', 'ცისფერი კრისტალები', 'მინანქარი'],
     materialsEn: ['925 Sterling Silver', 'Blue Crystals', 'Enamel'],
     images: [
-      '/src/assets/images/ocean_sea_life_stacked_rings_1780468810230.png'
+      '/assets/images/ocean_sea_life_stacked_rings_1780468810230.png'
     ],
     rating: 4.9,
     reviewsCount: 22,
@@ -222,7 +222,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['ნატურალური ვარსკვლავები', 'მდინარის მარგალიტი'],
     materialsEn: ['Natural Starfish', 'River Pearls'],
     images: [
-      '/src/assets/images/boho_starfish_hair_crown_1780469077228.png'
+      '/assets/images/boho_starfish_hair_crown_1780469077228.png'
     ],
     rating: 5.0,
     reviewsCount: 6,
@@ -241,7 +241,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['კერამიკა', 'ოქრო 585', 'მარგალიტი'],
     materialsEn: ['Ceramic', '18K Gold Plated', 'Pearls'],
     images: [
-      '/src/assets/images/guzelia_designer_blue_collar_1780469094416.png'
+      '/assets/images/guzelia_designer_blue_collar_1780469094416.png'
     ],
     rating: 4.9,
     reviewsCount: 15,
@@ -260,7 +260,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['ვერცხლი 925', 'კაურის ნიჟარები'],
     materialsEn: ['925 Sterling Silver', 'Cowrie Shells'],
     images: [
-      '/src/assets/images/silver_spiral_armlet_1780469110290.png'
+      '/assets/images/silver_spiral_armlet_1780469110290.png'
     ],
     rating: 4.8,
     reviewsCount: 12,
@@ -279,7 +279,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     materials: ['მთვარის ქვა', 'ოქრო 585', 'მარგალიტი'],
     materialsEn: ['Moonstone', '18K Gold Plated', 'Pearls'],
     images: [
-      '/src/assets/images/iridescent_star_shell_necklace_1780469130137.png'
+      '/assets/images/iridescent_star_shell_necklace_1780469130137.png'
     ],
     rating: 4.9,
     reviewsCount: 18,
