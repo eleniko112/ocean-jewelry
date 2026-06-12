@@ -458,6 +458,8 @@ export const TRANSLATIONS = {
       productStock: 'მარაგი',
       productKeywords: 'საძიებო სიტყვები (დაყავით მძიმით)',
       productDescription: 'აღწერა',
+      productImages: 'პროდუქტის სურათები (URL)',
+      addImage: 'სურათის დამატება',
       cancel: 'გაუქმება',
       save: 'შენახვა'
     },
@@ -636,6 +638,8 @@ export const TRANSLATIONS = {
       productStock: 'Stock',
       productKeywords: 'Keywords (comma separated)',
       productDescription: 'Description',
+      productImages: 'Product Images (URL)',
+      addImage: 'Add Image URL',
       cancel: 'Cancel',
       save: 'Save'
     },

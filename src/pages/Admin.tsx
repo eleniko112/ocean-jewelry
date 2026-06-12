@@ -258,7 +258,7 @@ export default function Admin() {
                initial={{ opacity: 0, scale: 0.9, y: 50 }}
                animate={{ opacity: 1, scale: 1, y: 0 }}
                exit={{ opacity: 0, scale: 0.9, y: 50 }}
-               className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-3xl bg-ocean-deep z-[101] overflow-hidden flex flex-col shadow-2xl border border-black/10"
+               className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-3xl max-h-[90vh] md:max-h-[85vh] bg-ocean-deep z-[101] overflow-hidden flex flex-col shadow-2xl border border-black/10"
             >
                <div className="p-8 border-b border-black/5 flex items-center justify-between">
                   <h2 className="display text-2xl font-light uppercase tracking-tighter italic text-pearl">
@@ -339,6 +339,91 @@ export default function Admin() {
                       onChange={e => setFormData({...formData, description: e.target.value})}
                       className="w-full bg-black/5 border border-black/10 px-8 py-5 rounded-2xl outline-none focus:border-ocean-wave resize-none serif text-pearl italic font-light"
                     />
+                  </div>
+
+                  {/* Product Images (Photo Redacting/Editing) */}
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.4em] text-pearl/30">
+                        {t.admin.productImages}
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentImages = formData.images ? [...formData.images] : [];
+                          setFormData({
+                            ...formData,
+                            images: [...currentImages, '']
+                          });
+                        }}
+                        className="text-ocean-wave hover:text-pearl transition-colors flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border border-ocean-wave/20 hover:border-pearl/20 px-4 py-2 rounded-xl bg-ocean-wave/5"
+                      >
+                        <Plus size={14} />
+                        {t.admin.addImage}
+                      </button>
+                    </div>
+
+                    <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                      {formData.images && formData.images.map((imgUrl, index) => (
+                        <div key={index} className="flex gap-4 items-center bg-black/25 p-4 border border-white/5 rounded-2xl">
+                          {/* Image preview thumbnail */}
+                          <div className="w-16 h-16 bg-black/40 border border-white/5 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center relative group/preview">
+                            {imgUrl ? (
+                              <img 
+                                src={imgUrl} 
+                                alt=""
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/placeholder/800/1000';
+                                }}
+                                className="w-full h-full object-cover"
+                                referrerPolicy="no-referrer"
+                              />
+                            ) : (
+                              <div className="text-pearl/20 text-[10px] font-mono">No Src</div>
+                            )}
+                          </div>
+
+                          {/* Image URL input field */}
+                          <input 
+                            type="text"
+                            required
+                            placeholder="e.g., /assets/images/starfish_shell_earrings_1780467669639.png"
+                            value={imgUrl}
+                            onChange={(e) => {
+                              const updated = [...(formData.images || [])];
+                              updated[index] = e.target.value;
+                              setFormData({
+                                ...formData,
+                                images: updated
+                              });
+                            }}
+                            className="flex-1 bg-black/20 border border-white/5 px-6 py-4 rounded-xl outline-none focus:border-ocean-wave serif text-pearl/80 italic font-light text-sm"
+                          />
+
+                          {/* Delete button */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = (formData.images || []).filter((_, i) => i !== index);
+                              setFormData({
+                                ...formData,
+                                images: updated
+                              });
+                            }}
+                            className="p-3 bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all rounded-xl border border-rose-500/20"
+                            title="Delete Image"
+                          >
+                            <Trash2 size={16} strokeWidth={1.5} />
+                          </button>
+                        </div>
+                      ))}
+
+                      {(!formData.images || formData.images.length === 0) && (
+                        <div className="text-center py-6 text-pearl/30 serif italic text-sm">
+                          No images defined. Please add at least one image URL for this product.
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="pt-12 flex gap-6">
