@@ -42,25 +42,30 @@ export const ShopProvider = ({ children }: { children: ReactNode }) => {
             if (p && Array.isArray(p.images)) {
               return {
                 ...p,
-                images: p.images.map((img: string) =>
-                  img.startsWith('/src/assets/images/')
-                    ? img.replace('/src/assets/images/', '/assets/images/')
-                    : img
-                )
+                images: p.images.map((img: string) => {
+                  if (typeof img === 'string') {
+                    // Replace any older paths like "/src/assets/images/..." or "src/assets/images/..." or "/assets/images/..."
+                    return img
+                      .replace(/^\/?src\/assets\/images\//, '/assets/images/')
+                      .replace(/^\/?assets\/images\//, '/assets/images/');
+                  }
+                  return img;
+                })
               };
             }
             return p;
           });
           // Update/override all initial products with the freshest details and correct paths from constants.ts!
+          // We convert both IDs to strings to prevent comparison failure if one of them is stored as a number in older sessions.
           const merged = cleaned.map(p => {
-            const initial = INITIAL_PRODUCTS.find(i => i.id === p.id);
+            const initial = INITIAL_PRODUCTS.find(i => String(i.id) === String(p.id));
             if (initial) {
               return initial;
             }
             return p;
           });
           INITIAL_PRODUCTS.forEach(initial => {
-            if (!merged.some(p => p.id === initial.id)) {
+            if (!merged.some(p => String(p.id) === String(initial.id))) {
               merged.push(initial);
             }
           });
